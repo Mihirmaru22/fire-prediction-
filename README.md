@@ -106,5 +106,4 @@ Contributions are welcome! Please follow these steps:
 
 *Developed by [Mihir Maru]*
 
-```
 
