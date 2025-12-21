@@ -1,6 +1,5 @@
-Here is the raw Markdown text. You can copy the content inside the code block below and paste it directly into your `README.md` file.
 
-```markdown
+
 # Fire Weather Index (FWI) Prediction AI
 
 ![Python](https://img.shields.io/badge/Python-3.9%2B-blue?style=for-the-badge&logo=python&logoColor=white)
@@ -114,4 +113,3 @@ This project is licensed under the **MIT License**. See the `LICENSE` file for d
 
 ```
 
-```
