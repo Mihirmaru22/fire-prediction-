@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FWI Prediction</title>
+</head>
+
+<body>
+    <div class="login">
+        <h1>FWI Prediction</h1>
+
+        <form action="{{ url_for('predict') }}" method="post">
+            <div style="margin-bottom: 10px;">
+                <input type="text" name="Temperature" placeholder="Temperature" required />
+            </div>
+            <div style="margin-bottom: 10px;">
+                <input type="text" name="RH" placeholder="RH" required />
+            </div>
+            <div style="margin-bottom: 10px;">
+                <input type="text" name="Ws" placeholder="Ws" required />
+            </div>
+            <div style="margin-bottom: 10px;">
+                <input type="text" name="Rain" placeholder="Rain" required />
+            </div>
+            <div style="margin-bottom: 10px;">
+                <input type="text" name="FFMC" placeholder="FFMC" required />
+            </div>
+            <div style="margin-bottom: 10px;">
+                <input type="text" name="DMC" placeholder="DMC" required />
+            </div>
+            <div style="margin-bottom: 10px;">
+                <input type="text" name="DC" placeholder="DC" required />
+            </div>
+            <div style="margin-bottom: 10px;">
+                <input type="text" name="ISI" placeholder="ISI" required />
+            </div>
+            <div style="margin-bottom: 10px;">
+                <input type="text" name="BUI" placeholder="BUI" required />
+            </div>
+            <div style="margin-bottom: 10px;">
+                <input type="text" name="Classes" placeholder="Classes (0 or 1)" required />
+            </div>
+            <div style="margin-bottom: 10px;">
+                <input type="text" name="Region" placeholder="Region (0 or 1)" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block btn-large">
+                Predict
+            </button>
+        </form>
+
+        <h2>The predicted FWI value is: {{ result }}</h2>
+    </div>
+</body>
+</html>
