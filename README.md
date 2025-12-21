@@ -103,13 +103,8 @@ Contributions are welcome! Please follow these steps:
 4. Push to the branch (`git push origin feature/NewFeature`).
 5. Open a **Pull Request**.
 
-## 📄 License
 
-This project is licensed under the **MIT License**. See the `LICENSE` file for details.
-
----
-
-*Developed by [Your Name]*
+*Developed by [Mihir Maru]*
 
 ```
 
