@@ -77,6 +77,10 @@ Use the web interface to test different environmental scenarios:
 | **Safe Day** | 22°C | 85% | 2.5mm | **~0.3** | ✅ Low Risk |
 | **Danger Day** | 35°C | 30% | 0.0mm | **~18.6** | ⚠️ High Danger |
 
+## model performance 
+r2 : 0.987
+mse : 0.38
+Average prediction time over 1000 runs: 0.3645 ms
 ## 📂 Repository Structure
 
 ```text
