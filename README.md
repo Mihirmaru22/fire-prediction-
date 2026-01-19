@@ -1,113 +1,80 @@
+# Fire Weather Index Prediction Service
 
+![Python](https://img.shields.io/badge/Python-3.9%2B-blue?style=flat-square)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-production-orange?style=flat-square)
+![Inference](https://img.shields.io/badge/Inference-0.36ms-success?style=flat-square)
 
-# Fire Weather Index (FWI) Prediction AI
+Production-grade ML inference service for forest fire risk assessment.
 
-![Python](https://img.shields.io/badge/Python-3.9%2B-blue?style=for-the-badge&logo=python&logoColor=white)
-![Flask](https://img.shields.io/badge/Flask-2.0%2B-black?style=for-the-badge&logo=flask&logoColor=white)
-![Scikit-Learn](https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+This project implements a **deterministic, low-latency machine learning service** for predicting the Fire Weather Index (FWI) from environmental signals.  
+The system is engineered for **correctness, reproducibility, and operational safety**, not model novelty.
 
-> **A production-ready Machine Learning application for real-time forest fire risk assessment.**
-
-This system leverages Ridge Regression and a standardized data pipeline to predict the **Fire Weather Index (FWI)** with high precision. Designed with a modular architecture, it serves predictions via a RESTful Flask interface, wrapped in a modern, responsive UI.
+The production model is a **single serialized scikit-learn pipeline** (StandardScaler → Ridge Regression), ensuring identical outputs for identical inputs across deployments and eliminating training–serving skew.
 
 ---
 
-## ⚡ Key Features
+## System Goals
 
-* **Precision Modeling:** Trained on the **Algerian Forest Fires dataset** with optimized feature selection and hyperparameter tuning.
-* **Enterprise UI/UX:** A clean, "Glassmorphism" design system ensuring readability and responsiveness across devices.
-* **Robust Pipeline:** Automated `sklearn` pipeline handling scaling (`StandardScaler`) and inference in a single serialized object.
-* **Production Ready:** Lightweight, container-friendly structure suitable for deployment on AWS Elastic Beanstalk, Render, or Azure App Service.
+- Provide fast and reliable FWI predictions for real-time decision support  
+- Guarantee deterministic inference with bounded inputs and safe failure modes  
+- Enable future lifecycle extensions (drift detection, retraining, rollback)  
 
-## 🛠️ Technical Architecture
+This is **not** a research or Kaggle-style project.  
+It is an ML service designed to be **operated**, not demoed.
 
-| Component | Technology |
-| :--- | :--- |
-| **Core Logic** | Python 3.9+, NumPy, Pandas |
-| **Machine Learning** | Scikit-Learn (Ridge Regression, LassoCV) |
-| **Serialization** | Joblib (Optimized for NumPy arrays) |
-| **Web Framework** | Flask (Jinja2 Templating) |
-| **Frontend** | HTML5, CSS3, Flexbox/Grid System |
+---
 
-## 🚀 Quick Start Guide
+## Key Properties
 
-### Prerequisites
-* Python 3.8 or higher
-* Git
+- **Deterministic inference:** end-to-end pipeline serialized as a single artifact  
+- **Stateless REST API:** suitable for containerized and cloud environments  
+- **Strict input validation:** rejects out-of-range environmental parameters  
+- **Low-latency serving:** optimized for sub-millisecond inference  
 
-### 1. Installation
+---
 
-```bash
-# Clone the repository
-git clone [https://github.com/YOUR_USERNAME/fwi-prediction-app.git](https://github.com/YOUR_USERNAME/fwi-prediction-app.git)
+## Technical Stack
 
-# Navigate to project directory
-cd fwi-prediction-app
+| Layer | Technology |
+|-----|-----------|
+| Language | Python 3.9+ |
+| Machine Learning | scikit-learn (Ridge Regression, StandardScaler) |
+| Serialization | Joblib |
+| Serving | Flask (REST API) |
+| Interface | Minimal HTML/CSS (manual testing only) |
 
-# Create virtual environment
-python -m venv venv
+---
 
-# Activate environment
-# Windows:
-venv\Scripts\activate
-# Mac/Linux:
-source venv/bin/activate
+## Model Performance
 
-# Install dependencies
-pip install -r requirements.txt
+Measured on held-out test data.
 
-```
+- **R²:** 0.987  
+- **MSE:** 0.38  
+- **Average inference latency:** 0.36 ms (1000-run benchmark, single instance)
 
-### 2. Running the Application
+These metrics reflect a deliberate tradeoff favoring **latency, stability, and interpretability** over marginal accuracy gains from heavier models.
 
-```bash
-python application.py
+---
 
-```
-
-*The server will initialize at `http://127.0.0.1:8000*`
-
-## 🧪 Testing the Model
-
-Use the web interface to test different environmental scenarios:
-
-| Scenario | Temperature | Humidity | Rain | Prediction (FWI) | Status |
-| --- | --- | --- | --- | --- | --- |
-| **Safe Day** | 22°C | 85% | 2.5mm | **~0.3** | ✅ Low Risk |
-| **Danger Day** | 35°C | 30% | 0.0mm | **~18.6** | ⚠️ High Danger |
-
-## model performance 
-r2 : 0.987
-mse : 0.38
-Average prediction time over 1000 runs: 0.3645 ms
-## 📂 Repository Structure
+## Repository Structure
 
 ```text
-├── application.py       # Application entry point & route logic
-├── requirements.txt     # Dependency definition
+├── src/fwi/
+│   ├── api.py          # HTTP interface (Flask)
+│   ├── model.py        # Model loading & inference
+│   └── validate.py     # Input validation & invariants
+│
 ├── models/
-│   └── model.pkl        # Serialized Model Pipeline
-├── templates/
-│   ├── index.html       # Landing/Welcome page
-│   └── home.html        # Main prediction interface
-├── data_set/
-│   └── forest_fire.csv  # Training dataset source
-└── README.md            # Documentation
-
-```
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository.
-2. Create a feature branch (`git checkout -b feature/NewFeature`).
-3. Commit your changes (`git commit -m 'Add NewFeature'`).
-4. Push to the branch (`git push origin feature/NewFeature`).
-5. Open a **Pull Request**.
-
-
-*Developed by [Mihir Maru]*
-
-
+│   └── model.pkl       # Serialized ML pipeline
+│
+├── data/
+│   └── cleaned_forest_fires.csv
+│
+├── scripts/
+│   ├── evaluate.py     # Offline model evaluation
+│   └── benchmark.py   # Inference latency benchmarking
+│
+├── templates/          # Minimal UI for manual testing
+├── requirements.txt
+└── README.md
